@@ -1,0 +1,27 @@
+---
+title: "FIFA 21 Analysis"
+author: "Nathan Weldon"
+format: pdf
+editor: visual
+---
+
+## Introduction
+
+I am practicing taking FIFA 21 data and cleaning it.
+
+```{r include = FALSE}
+library(tidyverse)
+```
+
+You can add options to executable code like this
+
+```{r}
+data <- fifa21_raw_data
+
+#Cleaning up team and time period played
+
+teamtime <- data %>% 
+  mutate('contract' = str_sub(`Team & Contract`, start = -13)) %>% 
+  mutate('team' = str_sub(`Team & Contract`, start = 1, end = -15)) %>% 
+  select(78,79)
+```
