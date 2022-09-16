@@ -22,7 +22,9 @@ Checkout the `Team & Contract` column and separate by how long they have their c
 teamtime <- data %>% 
   drop_na() %>% 
   mutate('contract' = str_sub(`Team & Contract`, start = -13)) %>% 
-  mutate('team' = str_sub(`Team & Contract`, start = 1, end = -15))
+  mutate('team' = str_extract(`Team & Contract`, "[A-Za-z]{1,3}")) %>% 
+  select(79,78)
+mutate('team' = str_sub(`Team & Contract`, start = 1, end = -15))
 #[0-9]. = everything else but a digit
 a <- as.numeric(str_sub(teamtime$contract, start = -4, end = -3))
 b <- as.numeric(str_sub(teamtime$contract, start = 3, end = 4))
