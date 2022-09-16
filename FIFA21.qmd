@@ -11,17 +11,29 @@ I am practicing taking FIFA 21 data and cleaning it.
 
 ```{r include = FALSE}
 library(tidyverse)
+data <- fifa21_raw_data
 ```
 
-You can add options to executable code like this
+## Cleaning
+
+Checkout the `Team & Contract` column and separate by how long they have their contract period and their club. Then, find which players have played at a club for more than 10 years:
 
 ```{r}
-data <- fifa21_raw_data
-
-#Cleaning up team and time period played
-
 teamtime <- data %>% 
+  drop_na() %>% 
   mutate('contract' = str_sub(`Team & Contract`, start = -13)) %>% 
-  mutate('team' = str_sub(`Team & Contract`, start = 1, end = -15)) %>% 
-  select(78,79)
+  mutate('team' = str_sub(`Team & Contract`, start = 1, end = -15))
+#[0-9]. = everything else but a digit
+a <- as.numeric(str_sub(teamtime$contract, start = -4, end = -3))
+b <- as.numeric(str_sub(teamtime$contract, start = 3, end = 4))
+decades <- teamtime %>% 
+  as.numeric(str_detect(Name, 
+                        as.numeric(a)-as.numeric(b) >= 10))
+```
+
+Which players are highly valuable but still underpaid (on low wages)? (hint: scatter plot between wage and value?)
+
+```{r}
+
+
 ```
