@@ -11,12 +11,14 @@ Here, I will load in packages and narrow down what I want to work with for this 
 
 ```{r include = FALSE}
 library(tidyverse)
-
+library(janitor)
 data <- fifa21_raw_data %>% 
-  select(-c(photoUrl,playerUrl, `Loan Date End`, `Release Clause`))
+  select(-c(photoUrl,playerUrl, `Loan Date End`, `Release Clause`)) %>% 
+  clean_names()
+
 ```
 
-## Cleaning
+## Practice
 
 Checkout the `Team & Contract` column and separate by how long they have their contract period and their club. Then, find which players have played at a club for more than 10 years:
 
@@ -24,9 +26,9 @@ Checkout the `Team & Contract` column and separate by how long they have their c
 #clean
 teamtime <- data %>% 
   drop_na() %>% 
-  mutate('contract' = str_sub(`Team & Contract`, start = -13)) %>% 
-  mutate('team' = str_sub(`Team & Contract`, start = 1, end = -15)) %>% 
-  select(-c(`Team & Contract`))
+  mutate('contract' = str_sub(team_contract, start = -13)) %>% 
+  mutate('team' = str_sub(team_contract, start = 1, end = -15)) %>% 
+  select(-c(team_contract))
 
 #players 10+ years
 a <- str_sub(teamtime$contract, start = -4, end = -3) %>% 
@@ -37,25 +39,161 @@ b <- str_sub(teamtime$contract, start = 3, end = 4) %>%
 decades <- teamtime %>% 
   mutate('Years_at_club'= a-b) %>% 
   filter(c(a-b) >= 10) %>% 
-  select(c(Name, Years_at_club))
+  select(c(name, Years_at_club))
 
 tibble(decades)
 ```
 
-Game
+Which positions get paid the most? Create a plot that displays this data:
 
 ```{r}
 costs <- data %>% 
   drop_na() %>% 
-  mutate('value_millions' = str_extract(Value, "[0-9]+\\.*[0-9]+")) %>% 
-  mutate('wage_thousands' = str_extract(Wage, "[0-9]+\\.*[0-9]+")) %>% 
-  clean_names() %>% 
-  select(75,74,6)
+  mutate('wage_thousands' = str_extract(wage, "[0-9]+\\.*[0-9]+")) %>% 
+  select(74,bp)
+
 worth <- costs %>% 
+  drop_na() %>%
+  group_by(bp) %>% 
+  summarize('n' = mean(as.numeric(wage_thousands))) %>% 
+  tibble(value = (n * 1.15) * 100,
+          overall = mean(bp))
+
+worth %>% ggplot(aes(x = bp, y = value)) + 
+  geom_col(fill = 'chartreuse3') +
+  labs(title = 'Position vs wage',
+       subtitle ='Looking at the average wage (USD) per position',
+       x = 'Position',
+       y = 'Average Wage')
+
+
+```
+
+Let's observe at who is the best technically. Find out who is the best overall, has the best individual characteristic on a FIFA Card (pace,shooting, passing, dribbling, defending, physical) and who is the best overall right / left foot.
+
+```{r}
+#overall
+overall <- data %>% 
   drop_na() %>% 
-  tibble(value = as.numeric(value_millions) * 1000000,
-          overall = Overall)
-worth %>% ggplot(aes(x = overall, y = value_millions)) + geom_point()
+  filter(bp != 'GK') %>% 
+  filter(ova == max(ova)) %>% 
+  select(name, bp, ova) 
+#pace
+pace <- data %>% 
+  drop_na() %>% 
+  filter(bp != 'GK') %>% 
+  filter(pac == max(pac)) %>% 
+  select(name, bp, pac)
+#shooting
+shooting <- data %>% 
+  drop_na() %>% 
+  filter(bp != 'GK') %>% 
+  filter(sho == max(sho)) %>% 
+  select(name, bp, sho)
+#passing
+passing <- data %>% 
+  drop_na() %>% 
+  filter(bp != 'GK') %>% 
+  filter(pas == max(pas)) %>% 
+  select(name, bp, pas)
+#dribbling
+dribbling <- data %>% 
+  drop_na() %>% 
+  filter(bp != 'GK') %>% 
+  filter(dri == max(dri)) %>% 
+  select(name, bp, dri)
+#defending 
+defend <- data %>% 
+  drop_na() %>% 
+  filter(bp != 'GK') %>% 
+  filter(def == max(def)) %>% 
+  select(name, bp, def)
+#physical
+physical <- data %>% 
+  drop_na() %>% 
+  filter(bp != 'GK') %>% 
+  filter(phy == max(phy)) %>% 
+  select(name, bp, phy)
+#right
+rightf <- data %>% 
+  drop_na() %>%
+  filter(bp != 'GK') %>% 
+  filter(foot == 'Right') %>% 
+  filter(ova == max(ova)) %>% 
+  select(name, foot, ova)
+#left
+leftf <- data %>% 
+  drop_na() %>%
+  filter(bp != 'GK') %>% 
+  filter(foot == 'Left') %>% 
+  filter(ova == max(ova)) %>% 
+  select(name, foot, ova)
+
+overall
+pace
+shooting
+passing
+dribbling
+defend
+physical
+rightf
+leftf
+```
+
+Is there a correlation between:
+
+a\) age and overall rating?
+
+b\) aggression and defending?
+
+c\) weight and pace?
+
+d\) height and heading?
+
+```{r}
+#age and overall rating
+data %>% 
+  ggplot(mapping = aes(x = age, y = ova, color = foot)) + 
+  geom_jitter() 
+cor(data$age, data$ova)
 
 
+```
+
+*Conclusions*:
+
+There seems a moderately strong, positive correlation between age and the overall rating, in that the older a player is, the higher the rating will be, on average. From the graph, the points are generally following this trend confirmed by the correlation being .46. I added in the dominant foot for the aesthetic and to see if it played a role in the correlation between the two, and it did not have any noticeable impact.
+
+```{r}
+#aggression and defending
+data %>% 
+  ggplot(mapping = aes(x = aggression, y = def)) + 
+  geom_jitter()
+cor(data$aggression, data$def)
+```
+
+```{r}
+#age and overall rating
+paclbs <- data %>% 
+  mutate('Weight' = str_extract(weight, "[0-9]+")) %>% 
+  mutate('lbs' = as.numeric(Weight))
+paclbs %>% 
+  ggplot(mapping = aes(x = pac, y = lbs)) + 
+  geom_jitter()
+cor(paclbs$lbs, paclbs$pac)
+
+```
+
+```{r}
+#height and heading
+inches <- data %>%
+  drop_na() %>%
+  mutate('n' = as.numeric(str_sub(height, start=1, end = 1))) %>% 
+  mutate('n1' = as.numeric(str_sub(height, start = 3, end = -2))) %>%
+  mutate('ht' = (n * 12) + n1) %>%
+  select(heading_accuracy, n,  n1, ht)
+inches %>% 
+  ggplot(mapping = aes(x = heading_accuracy, y = ht)) +
+  geom_jitter()
+cor(inches$heading_accuracy, inches$ht)
 ```
