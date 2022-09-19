@@ -225,7 +225,7 @@ inches <- data %>%
   mutate('inc' = (n * 12) + n1) %>%
   select(heading_accuracy, n,  n1, inc)
 inches %>% 
-  ggplot(mapping = aes(x = heading_accuracy, y = inc)) +
+  ggplot(mapping = aes(x = inc, y = heading_accuracy)) +
   geom_jitter()
 cor(inches$heading_accuracy, inches$inc)
 m4 <- lm(heading_accuracy ~ inc, data = inches)

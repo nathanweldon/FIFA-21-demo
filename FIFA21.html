@@ -480,7 +480,7 @@ F-statistic:  2260 on 1 and 18977 DF,  p-value: &lt; 2.2e-16</code></pre>
 <span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">'inc'</span> <span class="ot">=</span> (n <span class="sc">*</span> <span class="dv">12</span>) <span class="sc">+</span> n1) <span class="sc">%&gt;%</span></span>
 <span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(heading_accuracy, n,  n1, inc)</span>
 <span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>inches <span class="sc">%&gt;%</span> </span>
-<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> heading_accuracy, <span class="at">y =</span> inc)) <span class="sc">+</span></span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> inc, <span class="at">y =</span> heading_accuracy)) <span class="sc">+</span></span>
 <span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="FIFA21_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
