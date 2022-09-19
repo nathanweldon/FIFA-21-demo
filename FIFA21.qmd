@@ -9,7 +9,7 @@ editor: visual
 
 Here, I will load in packages and narrow down what I want to work with for this data set:
 
-```{r message = FALSE}
+```{r message = FALSE, warning = FALSE}
 library(tidyverse)
 library(janitor)
 
@@ -25,7 +25,7 @@ data <- fifa21_raw_data %>%
 
 Checkout the `Team & Contract` column and separate by how long they have their contract period and their club. Then, find which players have played at a club for more than 10 years:
 
-```{r}
+```{r warning = FALSE}
 #clean
 teamtime <- data %>% 
   drop_na() %>% 
@@ -51,7 +51,7 @@ tibble(decades)
 
 Which positions get paid the most? Create a plot that displays this data:
 
-```{r}
+```{r warning = FALSE}
 costs <- data %>% 
   drop_na() %>% 
   mutate('wage_thousands' = str_extract(wage, "[0-9]+\\.*[0-9]+")) %>% 
@@ -74,9 +74,11 @@ worth %>% ggplot(aes(x = bp, y = value)) +
 
 ```
 
+## Check Ratings
+
 Let's observe at who is the best technically. Find out who is the best overall, has the best individual characteristic on a FIFA Card (pace,shooting, passing, dribbling, defending, physical) and who is the best overall right / left foot.
 
-```{r}
+```{r include = FALSE, warning = FALSE, echo = FALSE}
 #overall
 overall <- data %>% 
   drop_na() %>% 
@@ -134,6 +136,9 @@ leftf <- data %>%
   filter(ova == max(ova)) %>% 
   select(name, foot, ova)
 
+```
+
+```{r warning = FALSE}
 overall
 pace
 shooting
@@ -162,6 +167,9 @@ d\) height and heading?
 data %>% 
   ggplot(mapping = aes(x = age, y = ova, color = foot)) + 
   geom_jitter() 
+```
+
+```{r include = FALSE, echo = FALSE, warning = FALSE}
 cor(data$age, data$ova)
 m <- lm(ova ~ age, data = data)
 summary(m)
@@ -180,6 +188,9 @@ Overall, age is effective in predicting the overall rating of player.
 data %>% 
   ggplot(mapping = aes(x = aggression, y = def)) + 
   geom_jitter()
+```
+
+```{r include = FALSE, echo = FALSE, warning = FALSE}
 cor(data$aggression, data$def)
 m2 <- lm(def ~ aggression, data = data)
 summary(m2)
@@ -201,8 +212,11 @@ paclbs <- data %>%
 paclbs %>% 
   ggplot(mapping = aes(x = pac, y = lbs)) + 
   geom_jitter()
-cor(paclbs$lbs, paclbs$pac)
 
+```
+
+```{r include = FALSE, echo = FALSE, warning = FALSE}
+cor(paclbs$lbs, paclbs$pac)
 m3 <- lm(pac ~ lbs, data = paclbs)
 summary(m3)
 
@@ -223,20 +237,32 @@ inches <- data %>%
   mutate('n' = as.numeric(str_sub(height, start=1, end = 1))) %>% 
   mutate('n1' = as.numeric(str_sub(height, start = 3, end = -2))) %>%
   mutate('inc' = (n * 12) + n1) %>%
-  select(heading_accuracy, n,  n1, inc)
+  mutate('pos' = str_extract(positions, "[A-Za-z]+")) %>% 
+  select(heading_accuracy, n,  n1, inc, pos) 
+inches2 <- inches %>% 
+  filter(pos != 'GK') 
 inches %>% 
-  ggplot(mapping = aes(x = inc, y = heading_accuracy)) +
+  ggplot(mapping = aes(x = inc, y = heading_accuracy, color = pos)) +
   geom_jitter()
-cor(inches$heading_accuracy, inches$inc)
-m4 <- lm(heading_accuracy ~ inc, data = inches)
+inches2 %>% 
+  ggplot(mapping = aes(x = inc, y = heading_accuracy, color = pos)) +
+  geom_jitter()
+
+```
+
+```{r include = FALSE, echo = FALSE, warning = FALSE}
+cor(inches2$heading_accuracy, inches2$inc)
+m4 <- lm(heading_accuracy ~ inc, data = inches2)
 summary(m4)
 ```
 
 *Conclusions*:
 
-This data is strange, because it has an incredibly weak correlation (.01) and the graph explains it, but why there is a grouping of points almost separate from the bigger trend? Generally, it makes sense that taller players will have better heading accuracy, yet the grouping on the left seems to disprove this practical idea of being tall but bad at heading. The second grouping seems to follow an overall trend that make logical sense, but is heavily impacted by that first grouping.
+This data is strange, because originally it had an incredibly weak correlation (.01) and the graph explains it through two groupings of points, but why there is a grouping of points almost separate from the bigger trend? After some tweaking, I found that goalies held down the average. I changed the criteria to meet only field players and found there was a moderate correlation between height and heading accuracy at .51.
 
-This model where the height (in inches) of a player predicts the heading ability of a player, is not useful for a variety of reasons. For example, the R squared is tragically below several decimal places below 1, which signifies a very weak variability in the data. The p value (.12) is greater than alpha (.05), that means that there is no proof that there is some correlation between the two, statistically. The coefficient explains that for every inch that a player grows, there will be an increase in heading accuracy by a rating of .07.
+This model involves the height (in inches) of a player predicts the heading ability of a player. Including the goalies, the model was terrible. For example, the R squared is tragically below several decimal places below 1, which signifies a very weak variability in the data. The p value (.12) is greater than alpha (.05), that means that there is no proof that there is some correlation between the two, statistically. The coefficient explains that for every inch that a player grows, there will be an increase in heading accuracy by a rating of .07, on average.
+
+After changes to field players, I found the p value to be under alpha (\<2.2e-16), the r squared to be around .2, and the coefficient stating that for every inch a field player grows, there will be an increase of heading accuracy by more than 2 rating units. There is an obvious and practically logical conclusion that there is a degree of correlation between the height of a player and the heading accuracy.
 
 ## Predicting
 
