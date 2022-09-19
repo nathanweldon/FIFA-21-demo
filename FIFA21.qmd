@@ -1,6 +1,6 @@
 ---
 title: "FIFA 21 Analysis"
-author: "Nathan Weldon"
+author: "Nathan Weldon \n njw283@gmail.com"
 format: html
 editor: visual
 ---
@@ -237,7 +237,7 @@ inches <- data %>%
   mutate('n' = as.numeric(str_sub(height, start=1, end = 1))) %>% 
   mutate('n1' = as.numeric(str_sub(height, start = 3, end = -2))) %>%
   mutate('inc' = (n * 12) + n1) %>%
-  mutate('pos' = str_extract(positions, "[A-Za-z]+")) %>% 
+  mutate('pos' = str_extract(bp, "[A-Za-z]+")) %>% 
   select(heading_accuracy, n,  n1, inc, pos) 
 inches2 <- inches %>% 
   filter(pos != 'GK') 
@@ -266,8 +266,27 @@ After changes to field players, I found the p value to be under alpha (\<2.2e-16
 
 ## Predicting
 
-FIFA calculates the overall rating of each player through a variety of variables. Since there is a lot that goes into each position (ex. defensive creativity doesn't impact a striker as much as it does a defender), find a model that predicts the overall rating of only defenders; choose the variables you think fit a defender best and simplify the model.
+FIFA calculates the overall rating of each player through a variety of variables. Since there is a lot that goes into each position (ex. marking doesn't impact a striker as much as it does a defender), choose the variables you think fit a defender best and calculate the defender rating. Then, find the residual and evaluate.
 
-```{r}
+```{r warning = FALSE}
+tibble <- data %>% 
+  filter(bp == c("LB", "RB", "CB")) %>% 
+  select(c(name, bp, heading_accuracy, short_passing, curve, long_passing, ball_control, acceleration, sprint_speed, agility, dribbling, reactions, balance, jumping, stamina, strength, aggression, interceptions, positioning, vision, composure,  marking, standing_tackle, sliding_tackle, ova)) %>%
+  mutate('summ' = c(short_passing+ curve+ long_passing+ ball_control+ acceleration+ sprint_speed+ agility+ dribbling +reactions+ balance+ jumping+ stamina+ strength+ aggression+ interceptions+ positioning+ vision+ composure+  marking+ standing_tackle+ sliding_tackle)) %>% 
+  mutate('rating' = trunc(summ/21)) %>% 
+  mutate('residual' = ova - rating)
 
 ```
+
+```{r warning = FALSE, message = FALSE, warning=FALSE}
+tibble(mean_overall = trunc(mean(tibble$ova)),
+        mean_rate = trunc(mean(tibble$rating)),
+        resid = mean_overall - mean_rate)
+tibble %>% ggplot(aes(x = rating, y = ova)) +
+  geom_jitter() +
+  geom_smooth(color = 'red')
+```
+
+*Conclusions:*
+
+For the table, I took the mean residual from each
