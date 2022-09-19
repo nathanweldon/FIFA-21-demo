@@ -7,9 +7,9 @@ editor: visual
 
 ## Introduction
 
-Here, I will load in packages and narrow down what I want to work with for this dataset.
+Here, I will load in packages and narrow down what I want to work with for this data set:
 
-```{r include = FALSE}
+```{r message = FALSE}
 library(tidyverse)
 library(janitor)
 data <- fifa21_raw_data %>% 
@@ -18,7 +18,7 @@ data <- fifa21_raw_data %>%
 
 ```
 
-## Practice
+## Data Synthesis
 
 Checkout the `Team & Contract` column and separate by how long they have their contract period and their club. Then, find which players have played at a club for more than 10 years:
 
@@ -43,6 +43,8 @@ decades <- teamtime %>%
 
 tibble(decades)
 ```
+
+## Modeling Data
 
 Which positions get paid the most? Create a plot that displays this data:
 
@@ -140,6 +142,8 @@ rightf
 leftf
 ```
 
+## Statistical Analysis
+
 Is there a correlation between:
 
 a\) age and overall rating?
@@ -156,13 +160,17 @@ data %>%
   ggplot(mapping = aes(x = age, y = ova, color = foot)) + 
   geom_jitter() 
 cor(data$age, data$ova)
-
-
+m <- lm(ova ~ age, data = data)
+summary(m)
 ```
 
 *Conclusions*:
 
 There seems a moderately strong, positive correlation between age and the overall rating, in that the older a player is, the higher the rating will be, on average. From the graph, the points are generally following this trend confirmed by the correlation being .46. I added in the dominant foot for the aesthetic and to see if it played a role in the correlation between the two, and it did not have any noticeable impact.
+
+As for the summary of the model predicting overall rating by using age, this shows that the R squared is low (.21), meaning the variability of the data is lacking. In addition, there is a smaller p value than alpha (\<2e-16 \< .05), so there is at least some statistical significant correlation between the two. The coefficient means that for every year that a player ages, their rating will increase by .69 on average.
+
+Overall, age is effective in predicting the overall rating of player.
 
 ```{r}
 #aggression and defending
@@ -170,11 +178,17 @@ data %>%
   ggplot(mapping = aes(x = aggression, y = def)) + 
   geom_jitter()
 cor(data$aggression, data$def)
+m2 <- lm(def ~ aggression, data = data)
+summary(m2)
 ```
 
 *Conclusions*:
 
-The data above demonstrates that the more aggressive a player is, the better defender they will be based on the strong and positive correlation of .66. In reality this seems to be related because as a defender, it is imperative that you are aggressive when confronted with an attacker or a ball that you can win.
+The data above demonstrates that the more aggressive a player is, the better defender they will be on average, based on the strong and positive correlation of .66. In reality this seems to be related because as a defender, it is imperative that you are aggressive when confronted with an attacker or a ball that you can win.
+
+The model tells us that there is a statistical significant correlation when aggression rating predicts the defensive rating since the p value is significant. The R-squared is moderate, and shows a decent variability of data at .44. The coefficient is stating that for every increase in aggression rating, the defensive rating will increase by .66, for any player on average.
+
+To conclude, there is some influence on the defensive rating from the aggression rating, in this data set.
 
 ```{r}
 #weight and pace rating
@@ -186,11 +200,18 @@ paclbs %>%
   geom_jitter()
 cor(paclbs$lbs, paclbs$pac)
 
+m3 <- lm(pac ~ lbs, data = paclbs)
+summary(m3)
+
 ```
 
 *Conclusions*:
 
-This comparison between the weight of a player and how fast the player is, does not seem to have much magnitude in terms of correlation (-.32). The negative symbol is interesting, because it means that the less weight you are, the faster you will be, which makes practical sense as well as the similarity of the graph. I wonder why this would not be a higher correlation.
+This comparison between the weight of a player and how fast the player is, does not seem to have much magnitude in terms of correlation (-.32). The negative symbol is interesting, because it means that the less weight you are, the faster you will be on average, which makes practical sense as well as the similarity of the graph. I wonder why this would not be a higher correlation.
+
+The model, where pounds predicts pace, has a variety of useful statistical information that can be used to create a conclusion. For instance, the p value being lesser than the alpha value (\<2.2e-16 is less than .05), tells us that there is some sort of correlation between pace rating and weight (in pounds) of a player, on average. As for the R squared value, it shows how little variability there is for the data (.106), which does not provide much help when predicting. The coefficient signifies for every pound that is gained, the pace rating of a player will decrease by a factor of .22.
+
+Generally, there is some correlation between pace and weight.
 
 ```{r}
 #height and heading
@@ -198,10 +219,26 @@ inches <- data %>%
   drop_na() %>%
   mutate('n' = as.numeric(str_sub(height, start=1, end = 1))) %>% 
   mutate('n1' = as.numeric(str_sub(height, start = 3, end = -2))) %>%
-  mutate('ht' = (n * 12) + n1) %>%
-  select(heading_accuracy, n,  n1, ht)
+  mutate('inc' = (n * 12) + n1) %>%
+  select(heading_accuracy, n,  n1, inc)
 inches %>% 
-  ggplot(mapping = aes(x = heading_accuracy, y = ht)) +
+  ggplot(mapping = aes(x = heading_accuracy, y = inc)) +
   geom_jitter()
-cor(inches$heading_accuracy, inches$ht)
+cor(inches$heading_accuracy, inches$inc)
+m4 <- lm(heading_accuracy ~ inc, data = inches)
+summary(m4)
+```
+
+*Conclusions*:
+
+This data is strange, because it has an incredibly weak correlation (.01) and the graph explains it, but why there is a grouping of points almost separate from the bigger trend? Generally, it makes sense that taller players will have better heading accuracy, yet the grouping on the left seems to disprove this practical idea of being tall but bad at heading. The second grouping seems to follow an overall trend that make logical sense, but is heavily impacted by that first grouping.
+
+This model where the height (in inches) of a player predicts the heading ability of a player, is not useful for a variety of reasons. For example, the R squared is tragically below several decimal places below 1, which signifies a very weak variability in the data. The p value (.12) is greater than alpha (.05), that means that there is no proof that there is some correlation between the two, statistically. The coefficient explains that for every inch that a player grows, there will be an increase in heading accuracy by a rating of .07.
+
+## Predicting
+
+FIFA calculates the overall rating of each player through a variety of variables. Since there is a lot that goes into each position (ex. defensive creativity doesn't impact a striker as much as it does a defender), find a model that predicts the overall rating of only defenders; choose the variables you think fit a defender best and simplify the model.
+
+```{r}
+
 ```
