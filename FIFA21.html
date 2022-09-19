@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Nathan Weldon">
+
+<title>FIFA 21 Analysis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="FIFA21_files/libs/clipboard/clipboard.min.js"></script>
+<script src="FIFA21_files/libs/quarto-html/quarto.js"></script>
+<script src="FIFA21_files/libs/quarto-html/popper.min.js"></script>
+<script src="FIFA21_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="FIFA21_files/libs/quarto-html/anchor.min.js"></script>
+<link href="FIFA21_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="FIFA21_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="FIFA21_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="FIFA21_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="FIFA21_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">FIFA 21 Analysis</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Nathan Weldon </p>
+          </div>
+  </div>
+    
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>Here, I will load in packages and narrow down what I want to work with for this data set:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'tidyverse' was built under R version 4.1.2</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janitor)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>fifa21_raw_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"~/Desktop/Career/Practice/Github/FIFA 21/fifa21_raw_data.csv"</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> fifa21_raw_data <span class="sc">%&gt;%</span> </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(photoUrl,playerUrl, <span class="st">`</span><span class="at">Loan Date End</span><span class="st">`</span>, <span class="st">`</span><span class="at">Release Clause</span><span class="st">`</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="data-synthesis" class="level2">
+<h2 class="anchored" data-anchor-id="data-synthesis">Data Synthesis</h2>
+<p>Checkout the <code>Team &amp; Contract</code> column and separate by how long they have their contract period and their club. Then, find which players have played at a club for more than 10 years:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#clean</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>teamtime <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">'contract'</span> <span class="ot">=</span> <span class="fu">str_sub</span>(team_contract, <span class="at">start =</span> <span class="sc">-</span><span class="dv">13</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">'team'</span> <span class="ot">=</span> <span class="fu">str_sub</span>(team_contract, <span class="at">start =</span> <span class="dv">1</span>, <span class="at">end =</span> <span class="sc">-</span><span class="dv">15</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(team_contract))</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">#players 10+ years</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">str_sub</span>(teamtime<span class="sc">$</span>contract, <span class="at">start =</span> <span class="sc">-</span><span class="dv">4</span>, <span class="at">end =</span> <span class="sc">-</span><span class="dv">3</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.numeric</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in str_sub(teamtime$contract, start = -4, end = -3) %&gt;% as.numeric():
+NAs introduced by coercion</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">str_sub</span>(teamtime<span class="sc">$</span>contract, <span class="at">start =</span> <span class="dv">3</span>, <span class="at">end =</span> <span class="dv">4</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.numeric</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in str_sub(teamtime$contract, start = 3, end = 4) %&gt;% as.numeric(): NAs
+introduced by coercion</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>decades <span class="ot">&lt;-</span> teamtime <span class="sc">%&gt;%</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">'Years_at_club'</span><span class="ot">=</span> a<span class="sc">-</span>b) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">c</span>(a<span class="sc">-</span>b) <span class="sc">&gt;=</span> <span class="dv">10</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">c</span>(name, Years_at_club))</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(decades)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 462 × 2
+   name            Years_at_club
+   &lt;chr&gt;                   &lt;dbl&gt;
+ 1 L. Messi                   17
+ 2 Casemiro                   10
+ 3 M. Neuer                   12
+ 4 K. Benzema                 13
+ 5 Sergio Ramos               16
+ 6 S. Agüero                  10
+ 7 H. Kane                    14
+ 8 Sergio Busquets            15
+ 9 H. Lloris                  10
+10 G. Chiellini               16
+# … with 452 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="modeling-data" class="level2">
+<h2 class="anchored" data-anchor-id="modeling-data">Modeling Data</h2>
+<p>Which positions get paid the most? Create a plot that displays this data:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>costs <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">'wage_thousands'</span> <span class="ot">=</span> <span class="fu">str_extract</span>(wage, <span class="st">"[0-9]+</span><span class="sc">\\</span><span class="st">.*[0-9]+"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="dv">74</span>,bp)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>worth <span class="ot">&lt;-</span> costs <span class="sc">%&gt;%</span> </span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(bp) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="st">'n'</span> <span class="ot">=</span> <span class="fu">mean</span>(<span class="fu">as.numeric</span>(wage_thousands))) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(<span class="at">value =</span> (n <span class="sc">*</span> <span class="fl">1.15</span>) <span class="sc">*</span> <span class="dv">100</span>,</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>          <span class="at">overall =</span> <span class="fu">mean</span>(bp))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in mean.default(bp): argument is not numeric or logical: returning NA</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>worth <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> bp, <span class="at">y =</span> value)) <span class="sc">+</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">'chartreuse3'</span>) <span class="sc">+</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Position vs wage'</span>,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span><span class="st">'Looking at the average wage (USD) per position'</span>,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">'Position'</span>,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">'Average Wage'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="FIFA21_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Let’s observe at who is the best technically. Find out who is the best overall, has the best individual characteristic on a FIFA Card (pace,shooting, passing, dribbling, defending, physical) and who is the best overall right / left foot.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#overall</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>overall <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(bp <span class="sc">!=</span> <span class="st">'GK'</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ova <span class="sc">==</span> <span class="fu">max</span>(ova)) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(name, bp, ova) </span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co">#pace</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>pace <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> </span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(bp <span class="sc">!=</span> <span class="st">'GK'</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(pac <span class="sc">==</span> <span class="fu">max</span>(pac)) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(name, bp, pac)</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="co">#shooting</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>shooting <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> </span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(bp <span class="sc">!=</span> <span class="st">'GK'</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(sho <span class="sc">==</span> <span class="fu">max</span>(sho)) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(name, bp, sho)</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="co">#passing</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>passing <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> </span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(bp <span class="sc">!=</span> <span class="st">'GK'</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(pas <span class="sc">==</span> <span class="fu">max</span>(pas)) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(name, bp, pas)</span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a><span class="co">#dribbling</span></span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>dribbling <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> </span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(bp <span class="sc">!=</span> <span class="st">'GK'</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(dri <span class="sc">==</span> <span class="fu">max</span>(dri)) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(name, bp, dri)</span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a><span class="co">#defending </span></span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>defend <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> </span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(bp <span class="sc">!=</span> <span class="st">'GK'</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(def <span class="sc">==</span> <span class="fu">max</span>(def)) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(name, bp, def)</span>
+<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a><span class="co">#physical</span></span>
+<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a>physical <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> </span>
+<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(bp <span class="sc">!=</span> <span class="st">'GK'</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(phy <span class="sc">==</span> <span class="fu">max</span>(phy)) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(name, bp, phy)</span>
+<span id="cb13-43"><a href="#cb13-43" aria-hidden="true" tabindex="-1"></a><span class="co">#right</span></span>
+<span id="cb13-44"><a href="#cb13-44" aria-hidden="true" tabindex="-1"></a>rightf <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> </span>
+<span id="cb13-45"><a href="#cb13-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb13-46"><a href="#cb13-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(bp <span class="sc">!=</span> <span class="st">'GK'</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-47"><a href="#cb13-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(foot <span class="sc">==</span> <span class="st">'Right'</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-48"><a href="#cb13-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ova <span class="sc">==</span> <span class="fu">max</span>(ova)) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-49"><a href="#cb13-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(name, foot, ova)</span>
+<span id="cb13-50"><a href="#cb13-50" aria-hidden="true" tabindex="-1"></a><span class="co">#left</span></span>
+<span id="cb13-51"><a href="#cb13-51" aria-hidden="true" tabindex="-1"></a>leftf <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> </span>
+<span id="cb13-52"><a href="#cb13-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb13-53"><a href="#cb13-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(bp <span class="sc">!=</span> <span class="st">'GK'</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-54"><a href="#cb13-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(foot <span class="sc">==</span> <span class="st">'Left'</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-55"><a href="#cb13-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ova <span class="sc">==</span> <span class="fu">max</span>(ova)) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-56"><a href="#cb13-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(name, foot, ova)</span>
+<span id="cb13-57"><a href="#cb13-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-58"><a href="#cb13-58" aria-hidden="true" tabindex="-1"></a>overall</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  name     bp      ova
+  &lt;chr&gt;    &lt;chr&gt; &lt;dbl&gt;
+1 L. Messi RW       93</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>pace</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 3
+  name         bp      pac
+  &lt;chr&gt;        &lt;chr&gt; &lt;dbl&gt;
+1 K. Mbappé    ST       96
+2 A. Davies    LB       96
+3 Adama Traoré RM       96</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>shooting</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  name              bp      sho
+  &lt;chr&gt;             &lt;chr&gt; &lt;dbl&gt;
+1 Cristiano Ronaldo ST       93</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>passing</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  name         bp      pas
+  &lt;chr&gt;        &lt;chr&gt; &lt;dbl&gt;
+1 K. De Bruyne CAM      93</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>dribbling</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  name     bp      dri
+  &lt;chr&gt;    &lt;chr&gt; &lt;dbl&gt;
+1 L. Messi RW       95</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>defend</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  name        bp      def
+  &lt;chr&gt;       &lt;chr&gt; &lt;dbl&gt;
+1 V. van Dijk CB       91</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>physical</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 3
+  name      bp      phy
+  &lt;chr&gt;     &lt;chr&gt; &lt;dbl&gt;
+1 Casemiro  CDM      91
+2 A. Méndez CB       91</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>rightf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  name              foot    ova
+  &lt;chr&gt;             &lt;chr&gt; &lt;dbl&gt;
+1 Cristiano Ronaldo Right    92</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>leftf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  name     foot    ova
+  &lt;chr&gt;    &lt;chr&gt; &lt;dbl&gt;
+1 L. Messi Left     93</code></pre>
+</div>
+</div>
+</section>
+<section id="statistical-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="statistical-analysis">Statistical Analysis</h2>
+<p>Is there a correlation between:</p>
+<p>a) age and overall rating?</p>
+<p>b) aggression and defending?</p>
+<p>c) weight and pace?</p>
+<p>d) height and heading?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co">#age and overall rating</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>data <span class="sc">%&gt;%</span> </span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> age, <span class="at">y =</span> ova, <span class="at">color =</span> foot)) <span class="sc">+</span> </span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="FIFA21_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(data<span class="sc">$</span>age, data<span class="sc">$</span>ova)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.4662803</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">lm</span>(ova <span class="sc">~</span> age, <span class="at">data =</span> data)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = ova ~ age, data = data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-25.8990  -4.1354  -0.3436   3.7952  27.1748 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  48.3393     0.2435  198.52   &lt;2e-16 ***
+age           0.6898     0.0095   72.61   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 6.165 on 18977 degrees of freedom
+Multiple R-squared:  0.2174,    Adjusted R-squared:  0.2174 
+F-statistic:  5272 on 1 and 18977 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p><em>Conclusions</em>:</p>
+<p>There seems a moderately strong, positive correlation between age and the overall rating, in that the older a player is, the higher the rating will be, on average. From the graph, the points are generally following this trend confirmed by the correlation being .46. I added in the dominant foot for the aesthetic and to see if it played a role in the correlation between the two, and it did not have any noticeable impact.</p>
+<p>As for the summary of the model predicting overall rating by using age, this shows that the R squared is low (.21), meaning the variability of the data is lacking. In addition, there is a smaller p value than alpha (&lt;2e-16 &lt; .05), so there is at least some statistical significant correlation between the two. The coefficient means that for every year that a player ages, their rating will increase by .69 on average.</p>
+<p>Overall, age is effective in predicting the overall rating of player.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co">#aggression and defending</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>data <span class="sc">%&gt;%</span> </span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> aggression, <span class="at">y =</span> def)) <span class="sc">+</span> </span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="FIFA21_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(data<span class="sc">$</span>aggression, data<span class="sc">$</span>def)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.6604249</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>m2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(def <span class="sc">~</span> aggression, <span class="at">data =</span> data)</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = def ~ aggression, data = data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-46.399  -7.889   2.670   8.937  38.851 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 14.645867   0.304193   48.15   &lt;2e-16 ***
+aggression   0.633557   0.005229  121.16   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 12.35 on 18977 degrees of freedom
+Multiple R-squared:  0.4362,    Adjusted R-squared:  0.4361 
+F-statistic: 1.468e+04 on 1 and 18977 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p><em>Conclusions</em>:</p>
+<p>The data above demonstrates that the more aggressive a player is, the better defender they will be on average, based on the strong and positive correlation of .66. In reality this seems to be related because as a defender, it is imperative that you are aggressive when confronted with an attacker or a ball that you can win.</p>
+<p>The model tells us that there is a statistical significant correlation when aggression rating predicts the defensive rating since the p value is significant. The R-squared is moderate, and shows a decent variability of data at .44. The coefficient is stating that for every increase in aggression rating, the defensive rating will increase by .66, for any player on average.</p>
+<p>To conclude, there is some influence on the defensive rating from the aggression rating, in this data set.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co">#weight and pace rating</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>paclbs <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> </span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">'Weight'</span> <span class="ot">=</span> <span class="fu">str_extract</span>(weight, <span class="st">"[0-9]+"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">'lbs'</span> <span class="ot">=</span> <span class="fu">as.numeric</span>(Weight))</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>paclbs <span class="sc">%&gt;%</span> </span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> pac, <span class="at">y =</span> lbs)) <span class="sc">+</span> </span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="FIFA21_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(paclbs<span class="sc">$</span>lbs, paclbs<span class="sc">$</span>pac)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -0.3261879</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>m3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(pac <span class="sc">~</span> lbs, <span class="at">data =</span> paclbs)</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = pac ~ lbs, data = paclbs)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-43.882  -5.988   0.386   6.587  30.034 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 104.409411   0.780883  133.71   &lt;2e-16 ***
+lbs          -0.223446   0.004701  -47.53   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 10.09 on 18977 degrees of freedom
+Multiple R-squared:  0.1064,    Adjusted R-squared:  0.1064 
+F-statistic:  2260 on 1 and 18977 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p><em>Conclusions</em>:</p>
+<p>This comparison between the weight of a player and how fast the player is, does not seem to have much magnitude in terms of correlation (-.32). The negative symbol is interesting, because it means that the less weight you are, the faster you will be on average, which makes practical sense as well as the similarity of the graph. I wonder why this would not be a higher correlation.</p>
+<p>The model, where pounds predicts pace, has a variety of useful statistical information that can be used to create a conclusion. For instance, the p value being lesser than the alpha value (&lt;2.2e-16 is less than .05), tells us that there is some sort of correlation between pace rating and weight (in pounds) of a player, on average. As for the R squared value, it shows how little variability there is for the data (.106), which does not provide much help when predicting. The coefficient signifies for every pound that is gained, the pace rating of a player will decrease by a factor of .22.</p>
+<p>Generally, there is some correlation between pace and weight.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co">#height and heading</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>inches <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">'n'</span> <span class="ot">=</span> <span class="fu">as.numeric</span>(<span class="fu">str_sub</span>(height, <span class="at">start=</span><span class="dv">1</span>, <span class="at">end =</span> <span class="dv">1</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">'n1'</span> <span class="ot">=</span> <span class="fu">as.numeric</span>(<span class="fu">str_sub</span>(height, <span class="at">start =</span> <span class="dv">3</span>, <span class="at">end =</span> <span class="sc">-</span><span class="dv">2</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">'inc'</span> <span class="ot">=</span> (n <span class="sc">*</span> <span class="dv">12</span>) <span class="sc">+</span> n1) <span class="sc">%&gt;%</span></span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(heading_accuracy, n,  n1, inc)</span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>inches <span class="sc">%&gt;%</span> </span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> heading_accuracy, <span class="at">y =</span> inc)) <span class="sc">+</span></span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="FIFA21_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(inches<span class="sc">$</span>heading_accuracy, inches<span class="sc">$</span>inc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.01102813</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>m4 <span class="ot">&lt;-</span> <span class="fu">lm</span>(heading_accuracy <span class="sc">~</span> inc, <span class="at">data =</span> inches)</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = heading_accuracy ~ inc, data = inches)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-47.343  -7.775   3.225  12.012  40.870 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 46.87338    3.33845  14.040   &lt;2e-16 ***
+inc          0.07104    0.04676   1.519    0.129    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 17.29 on 18977 degrees of freedom
+Multiple R-squared:  0.0001216, Adjusted R-squared:  6.893e-05 
+F-statistic: 2.308 on 1 and 18977 DF,  p-value: 0.1287</code></pre>
+</div>
+</div>
+<p><em>Conclusions</em>:</p>
+<p>This data is strange, because it has an incredibly weak correlation (.01) and the graph explains it, but why there is a grouping of points almost separate from the bigger trend? Generally, it makes sense that taller players will have better heading accuracy, yet the grouping on the left seems to disprove this practical idea of being tall but bad at heading. The second grouping seems to follow an overall trend that make logical sense, but is heavily impacted by that first grouping.</p>
+<p>This model where the height (in inches) of a player predicts the heading ability of a player, is not useful for a variety of reasons. For example, the R squared is tragically below several decimal places below 1, which signifies a very weak variability in the data. The p value (.12) is greater than alpha (.05), that means that there is no proof that there is some correlation between the two, statistically. The coefficient explains that for every inch that a player grows, there will be an increase in heading accuracy by a rating of .07.</p>
+</section>
+<section id="predicting" class="level2">
+<h2 class="anchored" data-anchor-id="predicting">Predicting</h2>
+<p>FIFA calculates the overall rating of each player through a variety of variables. Since there is a lot that goes into each position (ex. defensive creativity doesn’t impact a striker as much as it does a defender), find a model that predicts the overall rating of only defenders; choose the variables you think fit a defender best and simplify the model.</p>
+<div class="cell">
+
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

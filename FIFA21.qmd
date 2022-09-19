@@ -1,7 +1,7 @@
 ---
 title: "FIFA 21 Analysis"
 author: "Nathan Weldon"
-format: pdf
+format: html
 editor: visual
 ---
 
@@ -12,6 +12,9 @@ Here, I will load in packages and narrow down what I want to work with for this 
 ```{r message = FALSE}
 library(tidyverse)
 library(janitor)
+
+fifa21_raw_data <- read_csv("~/Desktop/Career/Practice/Github/FIFA 21/fifa21_raw_data.csv")
+
 data <- fifa21_raw_data %>% 
   select(-c(photoUrl,playerUrl, `Loan Date End`, `Release Clause`)) %>% 
   clean_names()
