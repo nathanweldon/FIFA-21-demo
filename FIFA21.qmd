@@ -264,9 +264,11 @@ This model involves the height (in inches) of a player predicts the heading abil
 
 After changes to field players, I found the p value to be under alpha (\<2.2e-16), the r squared to be around .2, and the coefficient stating that for every inch a field player grows, there will be an increase of heading accuracy by more than 2 rating units. There is an obvious and practically logical conclusion that there is a degree of correlation between the height of a player and the heading accuracy.
 
-## Predicting
+## Finding Averages
 
-FIFA calculates the overall rating of each player through a variety of variables. Since there is a lot that goes into each position (ex. marking doesn't impact a striker as much as it does a defender), choose the variables you think fit a defender best and calculate the defender rating. Then, find the residual and evaluate.
+We want to answer the question, "what makes a good defender?"...
+
+FIFA calculates the overall rating of each player through a variety of variables. Since there is a lot that goes into each position (ex. marking doesn't impact a striker as much as it does a defender), choose the variables you think fit a defender best and calculate the defender rating. Then, find the residual and evaluate without using the FIFA card variables.
 
 ```{r warning = FALSE}
 tibble <- data %>% 
@@ -279,14 +281,16 @@ tibble <- data %>%
 ```
 
 ```{r warning = FALSE, message = FALSE, warning=FALSE}
-tibble(mean_overall = trunc(mean(tibble$ova)),
-        mean_rate = trunc(mean(tibble$rating)),
+tibble(mean_overall = mean(tibble$ova),
+        mean_rate = mean(tibble$rating),
         resid = mean_overall - mean_rate)
 tibble %>% ggplot(aes(x = rating, y = ova)) +
   geom_jitter() +
-  geom_smooth(color = 'red')
+  geom_smooth(method = lm, color = 'red')
 ```
 
 *Conclusions:*
 
-For the table, I took the mean residual from each
+For the table, I found the difference between the mean of all of the overall ratings and the mean of the calculated ratings through my own terms. The residual of 6 means that the average difference between the calculated mean and the original mean is 6 units. This is the closest I could get without going negative or using the FIFA card stats. Overall, the variables I chose I had to tweak a bit to find the lowest residual, but eventually they do work the best for the provided variables for calculating the overall rating.
+
+As for the graph, we can see that the points do not stray too far away from the regression line, demonstrating smaller residuals despite several points within the middle area and top right of the concentration of data. Generally, based on the graph, this is a good representation.
