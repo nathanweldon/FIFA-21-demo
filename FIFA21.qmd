@@ -172,8 +172,12 @@ data %>%
 cor(data$aggression, data$def)
 ```
 
+*Conclusions*:
+
+The data above demonstrates that the more aggressive a player is, the better defender they will be based on the strong and positive correlation of .66. In reality this seems to be related because as a defender, it is imperative that you are aggressive when confronted with an attacker or a ball that you can win.
+
 ```{r}
-#age and overall rating
+#weight and pace rating
 paclbs <- data %>% 
   mutate('Weight' = str_extract(weight, "[0-9]+")) %>% 
   mutate('lbs' = as.numeric(Weight))
@@ -183,6 +187,10 @@ paclbs %>%
 cor(paclbs$lbs, paclbs$pac)
 
 ```
+
+*Conclusions*:
+
+This comparison between the weight of a player and how fast the player is, does not seem to have much magnitude in terms of correlation (-.32). The negative symbol is interesting, because it means that the less weight you are, the faster you will be, which makes practical sense as well as the similarity of the graph. I wonder why this would not be a higher correlation.
 
 ```{r}
 #height and heading
